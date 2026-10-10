@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¡Jugamos y contamos!</title>
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#243746;background:#f6f8f7;line-height:1.5}
+*{box-sizing:border-box}body{margin:0;padding:12px}.wrap{max-width:760px;margin:auto}
+header,section{background:#fff;border:2px solid #d8e7e4;border-radius:22px;padding:18px;margin-bottom:14px}
+h1{font-size:clamp(1.65rem,5vw,2.35rem);line-height:1.12;color:#245b63;margin:.45rem 0}h2{font-size:1.25rem;color:#2d6870;margin-top:.1rem}
+p{font-size:1.08rem}.sub{font-size:1rem;color:#526875}.pill{display:inline-block;background:#e5f3ee;border-radius:999px;padding:6px 12px;font-size:.9rem}
+.collection{font-size:clamp(2.5rem,9vw,4.5rem);text-align:center;letter-spacing:.08em;background:#f3f8f4;border-radius:16px;padding:16px;margin:14px 0;min-height:110px}
+.options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+button{font:inherit;cursor:pointer;border:2px solid #b7d4d1;border-radius:16px;padding:16px 10px;background:#edf7f4;color:#204b53;min-height:72px;font-size:1.3rem;font-weight:bold}
+button:focus-visible{outline:4px solid #d48b2f;outline-offset:3px}button.primary{background:#286a70;color:#fff;border-color:#286a70}button.secondary{font-size:1rem;background:#fff}
+#feedback{border-radius:14px;padding:14px;background:#f3f8f4;min-height:58px;margin-top:12px;font-size:1.08rem}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.small{font-size:.9rem;color:#526875}
+@media(max-width:420px){body{padding:8px}header,section{padding:13px}.options{gap:7px}button{padding:12px 6px;min-height:65px}}
+</style></head><body><main class="wrap">
+<header><span class="pill">🌈 Juego para preescolar</span><h1>¡Jugamos y contamos!</h1>
+<p>Ayuda a la ardillita a contar las frutas. Mira cada dibujo y elige cuántas hay.</p>
+<p class="sub">Puedes contar en voz alta, señalar cada fruta o usar tus dedos. ¡Vamos despacito!</p></header>
+<section aria-labelledby="activity-title"><h2 id="activity-title">¿Cuántas frutas hay?</h2>
+<div id="collection" class="collection" role="img" aria-label="Colección de frutas">🍎 🍎 🍎</div>
+<div class="options" aria-label="Elige la cantidad">
+<button type="button" data-answer="2" aria-label="Dos">2</button><button type="button" data-answer="3" aria-label="Tres">3</button><button type="button" data-answer="4" aria-label="Cuatro">4</button></div>
+<div id="feedback" role="status" aria-live="polite">Cuenta cada fruta tocándola o señalándola. Después elige un número.</div>
+<div class="row" style="margin-top:10px"><button type="button" id="hint" class="secondary">💡 Ayúdame</button><button type="button" id="next" class="primary">🍐 Otra colección</button><button type="button" id="reset" class="secondary">↻ Empezar de nuevo</button></div></section>
+<section><h2>Ahora, ¡con objetos de verdad!</h2><p>Busca tapas, bloques o lápices. Forma una colección igual a la que viste en la pantalla. Puedes mostrar la cantidad señalando, diciendo el número o enseñando los objetos a tu maestra.</p>
+<p class="small">Actividad breve con acompañamiento adulto. No tiene cronómetro ni castiga los errores. Continúa con objetos concretos fuera de la pantalla.</p></section>
+<script>
+const tasks=[{n:3,items:"🍎 🍎 🍎",name:"tres manzanas"},{n:2,items:"🍐 🍐",name:"dos peras"},{n:4,items:"🍓 🍓 🍓 🍓",name:"cuatro fresas"},{n:1,items:"🍊",name:"una naranja"},{n:5,items:"🍌 🍌 🍌 🍌 🍌",name:"cinco plátanos"}];
+let idx=0;const collection=document.getElementById('collection'),feedback=document.getElementById('feedback');
+function showTask(){const t=tasks[idx];collection.textContent=t.items;collection.setAttribute('aria-label','Colección de '+t.name);feedback.textContent='Cuenta cada fruta tocándola o señalándola. Después elige un número.';}
+function answer(n){const t=tasks[idx];if(n===t.n){feedback.textContent='¡Muy bien! Contaste '+t.name+'. ¿Puedes formar esa misma cantidad con bloques o tapas?';}else{feedback.textContent='¡Vamos a intentarlo otra vez! Señala cada fruta y cuenta despacito: una por una. Puedes pedir ayuda.';}}
+document.querySelectorAll('[data-answer]').forEach(b=>b.addEventListener('click',()=>answer(Number(b.dataset.answer))));
+document.getElementById('hint').addEventListener('click',()=>{feedback.textContent='Pista: señala cada dibujo una sola vez mientras cuentas. Si quieres, usa tus dedos para ayudarte.';});
+document.getElementById('next').addEventListener('click',()=>{idx=(idx+1)%tasks.length;showTask();});
+document.getElementById('reset').addEventListener('click',()=>{idx=0;showTask();});showTask();
+</script></main></body></html>
